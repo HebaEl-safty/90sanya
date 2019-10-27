@@ -1,0 +1,23 @@
+{
+  "name": "90sanya",
+  "version": "1.0.0",
+  "description": "90 sanya",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HebaEl-safty/90sanya.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HebaEl-safty/90sanya/issues"
+  },
+  "homepage": "https://github.com/HebaEl-safty/90sanya#readme",
+  "dependencies": {
+    "osmosis": "^1.1.10"
+  }
+}

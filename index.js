@@ -30,7 +30,6 @@ function getArabicActors(){
 
 getArabicActors().then( actors => {
   console.log('json',actors.length);
-
   let persons = null;
   let index ;
   for( let i in allWords){
@@ -40,19 +39,13 @@ getArabicActors().then( actors => {
       break;
     }
   }
-
   console.log(persons.words.length);
-
   let allPersonsWords = persons.words.concat(actors);
   console.log('allpersons', allPersonsWords.length);
-
   persons.words = allPersonsWords;
-
-
   allWords[index] = persons;
-
   const jsonContent = JSON.stringify(allWords,null,2);
-  fs.writeFile('./actors.json', jsonContent, 'utf8', (err) => {
+  fs.writeFile(jsonFilePath, jsonContent, 'utf8', (err) => {
    if (err) {
      return console.log(err);
    }
@@ -61,45 +54,42 @@ getArabicActors().then( actors => {
 });
 
 
-
-
-function getArabicMovie(){
+ function getArabicMovie(){
   return new Promise((resolve,reject) => {
    let movieNames= [] ;
-
    osmosis
-   .get('https://www.elcinema.com/index/work/country/eg')
-
-   .paginate('.pagination  li:nth-of-type(6)  a[href]', 568)
-
-   .find('table.expand tr')
-
-   .set({
-     title: 'td:nth-of-type(2) a[href]:nth-of-type(2)',
-     type: 'td:nth-child(3)'
-   })
-
-   .data( data => {
-      let movieName = data.title;
-      if(data.type === "فيلم"){
-        movieNames.push(movieName);
-      }
-
-   })
-
-   .error(err => reject(err))
-
-   .done(()=> resolve(movieNames))
+    .get('https://www.elcinema.com/index/work/country/eg')
+    .paginate("//ul[contains(@class,'pagination')]/li[last()-1]/a", 568)
+    .find('table.expand tr')
+    .set({
+      title: 'td:nth-of-type(2) a[href]:nth-of-type(2)',
+      type: 'td:nth-child(3)'
+    })
+    .data( data => {
+      let clearMovieName = data.title;
+       if(data.type !== "ﻓﻴﻠﻢ ﻗﺼﻴﺮ"
+          && data.type !== "مسلسل"
+          && data.type !== "ﻣﺴﻠﺴﻞ اﺫاﻋﻲ"
+          && data.type !== "ﻣﺴﺮﺣﻴﺔ"
+          && data.type !== "ﺑﺮﻧﺎﻣﺞ"
+          && data.type !== "ﺳﻴﺖ ﻛﻮﻡ"
+          && data.type !== "ﺭﺳﻮﻡ ﻣﺘﺤﺮﻛﺔ"
+          && data.type !== "ﻓﻴﻠﻢ وثائقي/تسجيلي"
+          && data.type !== "ﻓﻴﺪﻳﻮ ﻛﻠﻴﺐ"
+          && data.type !== "فوازير"
+       ){
+          movieNames.push(clearMovieName);
+       }
+    })
+    .error(err => reject(err))
+    .done(()=> resolve(movieNames))
   });
 }
 
 getArabicMovie().then( movies => {
   console.log('json',movies.length);
-
-  let allmovies = null ;
+  let allmovies;
   let index ;
-
-
   for(let i in allWords){
     if(allWords[i].name === 'أفلام'){
       allmovies = allWords[i];
@@ -107,18 +97,13 @@ getArabicMovie().then( movies => {
       break;
     }
   }
-
   console.log(allmovies.words.length);
-
   let allmovieWords = allmovies.words.concat(movies);
   console.log('allmovieWords', allmovieWords.length);
-
   allmovies.words = allmovieWords;
-
   allWords[index] = allmovies;
-
   const jsonContent = JSON.stringify(allWords,null,2)
-  fs.writeFile("./allmovie.json", jsonContent, 'utf8', function (err) {
+  fs.writeFile(jsonFilePath, jsonContent, 'utf8', function (err) {
    if (err) {
      return console.log(err);
    }
